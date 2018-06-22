@@ -7,11 +7,11 @@ class Hypothesis(object):
         self.a = a
         self.b = b
 
-    def gradient_descent(self, data_set, alpha):
+    def gradient_descent(self, data_set, learning_rate):
         converge = False
         while not converge:
-            a = self.new_a(data_set, alpha)
-            b = self.new_b(data_set, alpha)
+            a = self.new_a(data_set, learning_rate)
+            b = self.new_b(data_set, learning_rate)
             if (a, b) == (self.a, self.b):
                 converge = True
             else:
@@ -19,19 +19,19 @@ class Hypothesis(object):
                 self.b = b
             print "trying with values a = %f and b = %f" % (a,b)
 
-    def new_a(self, data_set, alpha):
+    def new_a(self, data_set, learning_rate):
         keys = data_set.keys()
         ssum = 0.0
         for key in keys:
             ssum += (self.h(key) - data_set[key]) * key
-        return self.a - alpha * (ssum / len(keys))
+        return self.a - learning_rate * (ssum / len(keys))
 
-    def new_b(self, data_set, alpha):
+    def new_b(self, data_set, learning_rate):
         keys = data_set.keys()
         ssum = 0.0
         for key in keys:
             ssum += self.h(key) - data_set[key]
-        return self.b - alpha * (ssum / len(keys))
+        return self.b - learning_rate * (ssum / len(keys))
 
     def h(self, x):
         return self.a * x + self.b
@@ -59,10 +59,10 @@ def regression(training_set):
     outputs for some inputs."""
 
     hypothesis = Hypothesis()
-    alpha = 0.05
-    # we can try to chose the best alpha before starting the learning
-    # the best alpha will make the gradient_descent converge rapidly
-    hypothesis.gradient_descent(training_set, alpha)
+    learning_rate = 0.05
+    # we can try to chose the best learning_rate before starting the learning
+    # the best learning_rate will make the gradient_descent converge rapidly
+    hypothesis.gradient_descent(training_set, learning_rate)
     print hypothesis
     print "cost = %f" % hypothesis.cost(training_set)
     return hypothesis.prediction_function()
